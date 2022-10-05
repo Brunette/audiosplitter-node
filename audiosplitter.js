@@ -15,7 +15,7 @@ var consoleOutput;
 const fileExt = file_utl.getFileExt(filePath);
 
 let filePathOut1 = "left.pcm"
-let filePathOut2 = "left.pcm"
+let filePathOut2 = "right.pcm"
 
 const byteData = new Int8Array(fs.readFileSync(filePath))
 const bytesLeft = new Int8Array(byteData.length/2)
