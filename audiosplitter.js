@@ -8,7 +8,16 @@
 
 var fs = require('fs');
 
-//console.log(process.argv);
 const filePath = process.argv[2];
-
+var consoleOutput;
 console.log(fs.readFileSync(filePath));
+
+const byteData = new Int8Array(fs.readFileSync(filePath))
+
+for (let i = 0; i<byteData.length; i+=2){
+    
+    console.log("Left: ", byteData[i], " Right: ", byteData[i]);
+}
+
+// consoleOutput = byteData[0];
+// console.log(consoleOutput);
