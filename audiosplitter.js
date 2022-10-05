@@ -11,11 +11,8 @@ var fs = require('fs');
 var file_utl = require('./fileutility');
 
 const filePath = process.argv[2];
-var consoleOutput;
 
 const fileExt = file_utl.getFileExt(filePath);
-
-
 
 let filePathOut1 = "left.pcm"
 let filePathOut2 = "right.pcm"
@@ -38,12 +35,9 @@ else if (fileExt == "wav"){
     startingPos = HEADER_SIZE;
 }
 
-
-
 for (let i = startingPos; i<byteData.length/2; i+=2){
-    bytesLeft[i] = byteData[i*2];
-    bytesRight[i] = byteData[(i+1)*2];
-    //console.log("Left: ", bytesLeft[i], " Right: ", bytesRight[i]);
+    bytesLeft[i] = byteData[(i*2)];
+    bytesRight[i] = byteData[(i*2)+1];
 }
 
 fs.writeFileSync(filePathOut1,Buffer.from(bytesLeft));
@@ -51,3 +45,4 @@ fs.writeFileSync(filePathOut2,Buffer.from(bytesRight));
 
 // consoleOutput = byteData[0];
 // console.log(consoleOutput);
+
