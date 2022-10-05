@@ -1,6 +1,13 @@
+/* TODOs:
+*  1) TEST
+        no unit tests of any kind were done. Unfamiliar with any unit test frameworks for node.
+    2) Support multi bit Types; 
+*
+/
 var fs = require('fs');
 var file_utl = require('./fileutility');
 var audioRead = require('./audioBitReader');
+//var audioReadCleaner = require('./audioBitReader_cleaner');
 var constants = require('./constants');
 
 const filePath = process.argv[2];
@@ -31,7 +38,9 @@ else if (fileExt == "wav") {
 audioRead.splitAudioData(byteData,headerSize,bitsPerSample,filePathOut1,filePathOut2);
 
 
-// const [leftBuffer, rightBuffer] = audioRead.splitAudioData(byteData,headerSize,bitsPerSample,filePathOut1,filePathOut2);
+
+/* Ideal end of function but can't get it to work, yet */
+// const [leftBuffer, rightBuffer] = audioReadCleaner.splitAudioData(byteData,headerSize,bitsPerSample,filePathOut1,filePathOut2);
 // fs.writeFileSync(leftBuffer, Buffer.from());
 // fs.writeFileSync(rightBuffer, Buffer.from());
 

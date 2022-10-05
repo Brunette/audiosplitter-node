@@ -1,7 +1,4 @@
-var fs = require('fs');
-var constants = require('./constants');
-
-function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+function read16bitAudio(startingPos, byteData){
     const bytesLeft = new Int16Array(byteData.length/2)
     const bytesRight = new Int16Array(byteData.length/2)
     let j = 0; 
@@ -14,12 +11,10 @@ function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         j+=2;
     }
     
-
-    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
-    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
+    return [bytesLeft,bytesRight];
 }
 
-function read8bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+function read8bitAudio(startingPos, byteData){
     const bytesLeft = new Int8Array(byteData.length)
     const bytesRight = new Int8Array(byteData.length)
     let j = 0; 
@@ -29,11 +24,10 @@ function read8bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         bytesRight[j] = byteData[i+2];       
         j+=1;
     }    
-    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
-    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
+    return [bytesLeft,bytesRight];
 }
 
-function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+function read32bitAudio(startingPos, byteData){
     const bytesLeft = new Int32Array(byteData.length/2)
     const bytesRight = new Int32Array(byteData.length/2)
     let j = 0; 
@@ -50,8 +44,7 @@ function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         j+=4;
     }
     
-    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
-    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
+    return [bytesLeft,bytesRight];
 }
 
 
@@ -64,34 +57,30 @@ function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         ....
         return [bufferLeft, bufferRight]
     }
-*   passing the fileNames is shameful;  
-*  see audioBitReader_cleaner for attempted improvement, currently can't read return values;  
+*   passing the fileNames is shameful;    
 * 
 */
-function splitAudioData(byteData, startingPos,bitsPerSample,filePathOut1, filePathOut2){
+function splitAudioData(byteData, startingPos,bitsPerSample){
 switch (bitsPerSample) {
     case 8:
         {
             const byteData8 = new Int8Array(byteData, startingPos, byteData.length)
-            read8bitAudio(startingPos, byteData8, filePathOut1, filePathOut2);
-            break;
+            return read8bitAudio(startingPos, byteData8);
         }
     case 16:
         {
             const byteData16 = new Int16Array(byteData, startingPos, (byteData.length - startingPos) / 2)
-            read16bitAudio(startingPos, byteData16, filePathOut1, filePathOut2);
+            return read16bitAudio(startingPos, byteData16);
         }
-        break;
     case 32:
         {
             const byteData32 = new Int32Array(byteData, startingPos, (byteData.length - startingPos) / 4)
-            read32bitAudio(startingPos, byteData32, filePathOut1, filePathOut2);
+            return read32bitAudio(startingPos, byteData32);
         }
-        break;
     default:
         {
             const byteData16 = new Int16Array(byteData, startingPos, (byteData.length - startingPos) / 2)
-            read16bitAudio(startingPos, byteData16, filePathOut1, filePathOut2);
+            return read16bitAudio(startingPos, byteData16);
         }
     }
 }
