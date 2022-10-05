@@ -1,0 +1,4 @@
+const HEADER_SIZE = 44;
+const BITS_PER_SAMPLE_OFFSET = 34;
+
+module.exports = {HEADER_SIZE,BITS_PER_SAMPLE_OFFSET}

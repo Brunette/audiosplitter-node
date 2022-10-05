@@ -1,4 +1,5 @@
 var fs = require('fs');
+var constants = require('./constants');
 
 function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     const bytesLeft = new Int16Array(byteData.length/2)
@@ -52,4 +53,32 @@ function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
 }
 
-module.exports = {read8bitAudio, read16bitAudio, read32bitAudio}
+function splitAudioData(byteData, startingPos,bitsPerSample,filePathOut1, filePathOut2){
+switch (bitsPerSample) {
+    case 8:
+        {
+            const byteData8 = new Int8Array(byteData, startingPos, byteData.length)
+            read8bitAudio(startingPos, byteData8, filePathOut1, filePathOut2);
+            break;
+        }
+    case 16:
+        {
+            const byteData16 = new Int16Array(byteData, startingPos, (byteData.length - startingPos) / 2)
+            read16bitAudio(startingPos, byteData16, filePathOut1, filePathOut2);
+        }
+        break;
+    case 32:
+        {
+            const byteData32 = new Int32Array(byteData, startingPos, (byteData.length - startingPos) / 4)
+            read32bitAudio(startingPos, byteData32, filePathOut1, filePathOut2);
+        }
+        break;
+    default:
+        {
+            const byteData16 = new Int16Array(byteData, startingPos, (byteData.length - startingPos) / 2)
+            read16bitAudio(startingPos, byteData16, filePathOut1, filePathOut2);
+        }
+    }
+}
+
+module.exports = {splitAudioData}
