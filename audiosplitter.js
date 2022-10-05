@@ -31,6 +31,7 @@ else if (fileExt == "wav") {
 audioRead.splitAudioData(byteData,headerSize,bitsPerSample,filePathOut1,filePathOut2);
 
 
-// consoleOutput = byteData[0];
-// console.log(consoleOutput);
+// const [leftBuffer, rightBuffer] = audioRead.splitAudioData(byteData,headerSize,bitsPerSample,filePathOut1,filePathOut2);
+// fs.writeFileSync(leftBuffer, Buffer.from());
+// fs.writeFileSync(rightBuffer, Buffer.from());
 

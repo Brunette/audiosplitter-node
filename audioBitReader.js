@@ -14,6 +14,7 @@ function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         j+=2;
     }
     
+
     fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
     fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
 }
@@ -53,6 +54,19 @@ function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
 }
 
+
+
+/* TODO: This function does too much.
+* Takes in data, calls secondary function AND then writes to files
+* improved signature would be something like
+* 
+    function splitAudioData(byteData, startingPos,bitsPerSample){
+        ....
+        return [bufferLeft, bufferRight]
+    }
+*   passing the fileNames is shameful;    
+* 
+*/
 function splitAudioData(byteData, startingPos,bitsPerSample,filePathOut1, filePathOut2){
 switch (bitsPerSample) {
     case 8:
