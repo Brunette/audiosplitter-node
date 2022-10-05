@@ -13,10 +13,13 @@ var consoleOutput;
 console.log(fs.readFileSync(filePath));
 
 const byteData = new Int8Array(fs.readFileSync(filePath))
-
-for (let i = 0; i<byteData.length; i+=2){
+const bytesLeft = new Int8Array(byteData.length/2)
+const bytesRight = new Int8Array(byteData.length/2)
+for (let i = 0; i<byteData.length/2; i+=2){
     
-    console.log("Left: ", byteData[i], " Right: ", byteData[i]);
+    bytesLeft[i] = byteData[i*2];
+    bytesRight[i] = byteData[(i+1)*2];
+    console.log("Left: ", bytesLeft[i], " Right: ", bytesRight[i]);
 }
 
 // consoleOutput = byteData[0];
