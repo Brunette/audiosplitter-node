@@ -24,24 +24,36 @@ const byteData = new Int16Array(fs.readFileSync(filePath))
 
 const startingPos = 0;
 
-// if (fileExt == "pcm"){
-//     // assume 16 bit?
-// }
-// else if (fileExt == "wav"){
-//     for (let i = 0; i<HEADER_SIZE; i+=1){
-//         bytesAudioHeader[i] = byteData[i];
-//     }
-//     startingPos = HEADER_SIZE;
-// }
+if (fileExt == "pcm"){
+    // assume 16 bit?
+}
+else if (fileExt == "wav"){
+    for (let i = 0; i<HEADER_SIZE; i+=1){
+        bytesAudioHeader[i] = byteData[i];
+    }
+    startingPos = HEADER_SIZE;
+}
+
+function uint16 (n) {
+    return n & 0xFFFF;
+  }
+
+//   byteData.forEach(sample => { 
+//     left = sample & 0x000F;
+//     left2 = sample & 0x00F0 >> 8;
+//     right = (sample & 0x0F00) >> 16;
+//     right2 = (sample & 0xF000) >> 24;
+// })
 
 function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     const bytesLeft = new Int16Array(byteData.length/2)
     const bytesRight = new Int16Array(byteData.length/2)
     let j = 0; 
+   
     for (let i = startingPos; i<byteData.length; i+=4){
         bytesLeft[j] = byteData[i];
-        bytesRight[j] = byteData[i+2];    
         bytesLeft[j+1] = byteData[i+1];
+        bytesRight[j] = byteData[i+2];       
         bytesRight[j+1] = byteData[i+3];
         j+=2;
     }
