@@ -24,6 +24,7 @@ const bytesAudioHeader = new Int8Array(44)
 
 let startingPos = 0;
 
+
 if (fileExt == "pcm"){
     // assume 16 bit?
 }
@@ -33,17 +34,12 @@ else if (fileExt == "wav"){
     }
     startingPos = HEADER_SIZE;
 }
-//const byteData16 = new Int16Array((byteData.length-HEADER_SIZE)/2);
+const byteData8 = new Int8Array(byteData, startingPos, byteData.length)
 const byteData16 = new Int16Array(byteData, startingPos, (byteData.length-HEADER_SIZE)/2)
+const byteData32 = new Int32Array(byteData, startingPos, (byteData.length-HEADER_SIZE)/4)
 
 
 console.log(byteData16.length);
-//   byteData.forEach(sample => { 
-//     left = sample & 0x000F;
-//     left2 = sample & 0x00F0 >> 8;
-//     right = (sample & 0x0F00) >> 16;
-//     right2 = (sample & 0xF000) >> 24;
-// })
 
 function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     const bytesLeft = new Int16Array(byteData.length/2)
@@ -56,6 +52,41 @@ function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
         bytesRight[j] = byteData[i+2];       
         bytesRight[j+1] = byteData[i+3];
         j+=2;
+    }
+    
+    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
+    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
+}
+
+function read8bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+    const bytesLeft = new Int8Array(byteData.length)
+    const bytesRight = new Int8Array(byteData.length)
+    let j = 0; 
+   
+    for (let i = startingPos; i<byteData.length; i+=2){
+        bytesLeft[j] = byteData[i];
+        bytesRight[j] = byteData[i+2];       
+        j+=1;
+    }    
+    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
+    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
+}
+
+function read32bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+    const bytesLeft = new Int32Array(byteData.length/2)
+    const bytesRight = new Int32Array(byteData.length/2)
+    let j = 0; 
+   
+    for (let i = startingPos; i<byteData.length; i+=8){
+        bytesLeft[j] = byteData[i];
+        bytesLeft[j+1] = byteData[i+1];
+        bytesLeft[j+2] = byteData[i+2];       
+        bytesLeft[j+3] = byteData[i+3];
+        bytesRight[j] = byteData[i+4];
+        bytesRight[j+1] = byteData[i+5];
+        bytesRight[j+2] = byteData[i+6];       
+        bytesRight[j+3] = byteData[i+7];
+        j+=4;
     }
     
     fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
