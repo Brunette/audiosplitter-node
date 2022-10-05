@@ -17,12 +17,12 @@ const fileExt = file_utl.getFileExt(filePath);
 let filePathOut1 = "left.pcm"
 let filePathOut2 = "right.pcm"
 
-const byteData = new Int16Array(fs.readFileSync(filePath))
+const byteData = new Int8Array(fs.readFileSync(filePath))
 
 
-//const bytesAudioHeader = new Int8Array(44)
+const bytesAudioHeader = new Int8Array(44)
 
-const startingPos = 0;
+let startingPos = 0;
 
 if (fileExt == "pcm"){
     // assume 16 bit?
@@ -33,11 +33,11 @@ else if (fileExt == "wav"){
     }
     startingPos = HEADER_SIZE;
 }
+//const byteData16 = new Int16Array((byteData.length-HEADER_SIZE)/2);
+const byteData16 = new Int16Array(byteData, startingPos, (byteData.length-HEADER_SIZE)/2)
 
-function uint16 (n) {
-    return n & 0xFFFF;
-  }
 
+console.log(byteData16.length);
 //   byteData.forEach(sample => { 
 //     left = sample & 0x000F;
 //     left2 = sample & 0x00F0 >> 8;
@@ -62,7 +62,7 @@ function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
     fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
 }
 
-read16bitAudio(startingPos, byteData, filePathOut1, filePathOut2);
+read16bitAudio(startingPos, byteData16, filePathOut1, filePathOut2);
 
 
 // consoleOutput = byteData[0];
