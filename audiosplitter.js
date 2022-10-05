@@ -18,8 +18,7 @@ let filePathOut1 = "left.pcm"
 let filePathOut2 = "right.pcm"
 
 const byteData = new Int16Array(fs.readFileSync(filePath))
-const bytesLeft = new Int16Array(byteData.length/2)
-const bytesRight = new Int16Array(byteData.length/2)
+
 
 //const bytesAudioHeader = new Int8Array(44)
 
@@ -35,17 +34,24 @@ const startingPos = 0;
 //     startingPos = HEADER_SIZE;
 // }
 
-let j = 0; 
-for (let i = startingPos; i<byteData.length; i+=4){
-    bytesLeft[j] = byteData[i];
-    bytesRight[j] = byteData[i+2];    
-    bytesLeft[j+1] = byteData[i+1];
-    bytesRight[j+1] = byteData[i+3];
-    j+=2;
+function read16bitAudio(startingPos, byteData, filePathLeft, filePathRight){
+    const bytesLeft = new Int16Array(byteData.length/2)
+    const bytesRight = new Int16Array(byteData.length/2)
+    let j = 0; 
+    for (let i = startingPos; i<byteData.length; i+=4){
+        bytesLeft[j] = byteData[i];
+        bytesRight[j] = byteData[i+2];    
+        bytesLeft[j+1] = byteData[i+1];
+        bytesRight[j+1] = byteData[i+3];
+        j+=2;
+    }
+    
+    fs.writeFileSync(filePathLeft,Buffer.from(bytesLeft));
+    fs.writeFileSync(filePathRight,Buffer.from(bytesRight));
 }
 
-fs.writeFileSync(filePathOut1,Buffer.from(bytesLeft));
-fs.writeFileSync(filePathOut2,Buffer.from(bytesRight));
+read16bitAudio(startingPos, byteData, filePathOut1, filePathOut2);
+
 
 // consoleOutput = byteData[0];
 // console.log(consoleOutput);
