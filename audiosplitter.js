@@ -7,10 +7,12 @@
 // bonus - handle 8, 16, 32 bit?
 
 var fs = require('fs');
+var file_utl = require('./fileutility');
 
 const filePath = process.argv[2];
 var consoleOutput;
-console.log(fs.readFileSync(filePath));
+
+const fileExt = file_utl.getFileExt(filePath);
 
 const byteData = new Int8Array(fs.readFileSync(filePath))
 const bytesLeft = new Int8Array(byteData.length/2)
