@@ -17,27 +17,31 @@ const fileExt = file_utl.getFileExt(filePath);
 let filePathOut1 = "left.pcm"
 let filePathOut2 = "right.pcm"
 
-const byteData = new Int8Array(fs.readFileSync(filePath))
-const bytesLeft = new Int8Array(byteData.length/2)
-const bytesRight = new Int8Array(byteData.length/2)
+const byteData = new Int16Array(fs.readFileSync(filePath))
+const bytesLeft = new Int16Array(byteData.length/2)
+const bytesRight = new Int16Array(byteData.length/2)
 
-const bytesAudioHeader = new Int8Array(44)
+//const bytesAudioHeader = new Int8Array(44)
 
 const startingPos = 0;
 
-if (fileExt == "pcm"){
-    // assume 16 bit?
-}
-else if (fileExt == "wav"){
-    for (let i = 0; i<HEADER_SIZE; i+=1){
-        bytesAudioHeader[i] = byteData[i];
-    }
-    startingPos = HEADER_SIZE;
-}
+// if (fileExt == "pcm"){
+//     // assume 16 bit?
+// }
+// else if (fileExt == "wav"){
+//     for (let i = 0; i<HEADER_SIZE; i+=1){
+//         bytesAudioHeader[i] = byteData[i];
+//     }
+//     startingPos = HEADER_SIZE;
+// }
 
-for (let i = startingPos; i<byteData.length/2; i+=2){
-    bytesLeft[i] = byteData[(i*2)];
-    bytesRight[i] = byteData[(i*2)+1];
+let j = 0; 
+for (let i = startingPos; i<byteData.length; i+=4){
+    bytesLeft[j] = byteData[i];
+    bytesRight[j] = byteData[i+2];    
+    bytesLeft[j+1] = byteData[i+1];
+    bytesRight[j+1] = byteData[i+3];
+    j+=2;
 }
 
 fs.writeFileSync(filePathOut1,Buffer.from(bytesLeft));
