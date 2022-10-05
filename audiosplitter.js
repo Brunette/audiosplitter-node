@@ -1,9 +1,14 @@
 /* TODOs:
-*  1) TEST
-        no unit tests of any kind were done. Unfamiliar with any unit test frameworks for node.
-    2) Support multi bit Types; 
-*
-/
+*   1) TEST
+        1a) no unit tests of any kind were done. Unfamiliar with any unit test frameworks for node.
+        1b) Test if output is actually correct or not. 
+    2) Support 8,16,32bit signatures. Read from Header data, close, but not getting correct bytes?.
+    3) Support for Multi-channel. Currently all input must be 2 channels.
+        3a) Get number of channels from header, then rather than pass 2 buffers for Left/Right, pass array of buffers, 1 per channel.
+    4) Lots of code cleanup/redundancy
+        4a) For loops could probably switch to cooler byteData.forEach(sample => {...})
+        4b) See audioBitReader_cleaner for proposed refactor on fileWriting.
+*/
 var fs = require('fs');
 var file_utl = require('./fileutility');
 var audioRead = require('./audioBitReader');
